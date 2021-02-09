@@ -6,10 +6,10 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Books</title>
+    <title>Products</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
-<body style="background-color:bisque;">
+<body style="background-color: burlywood;">
 
     <div>
         <!-- Navigation bar code -->
@@ -27,7 +27,7 @@
             </div>
         </nav>
 
-        <!-- following division is creating main area of the web page where all books data will display -->
+        <!-- following division is creating main area of the web page where all product data will display -->
         <div class="container">
             <div class="row" id="allProducts">
             </div>
@@ -35,7 +35,7 @@
     </div>
 
 
-    <!-- below mentioned code will create the template to add a new book -->
+    <!-- below mentioned code will create the template to add a new products -->
     <div class="modal" tabindex="-1" role="dialog" id="addProduct">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -65,12 +65,16 @@
                             <label for="Price">Price</label>
                             <input type="number" class="form-control" id="Price" aria-describedby="PriceHelp" placeholder="Price">
                         </div>
+                        <div class="form-group">
+                            <label for="Discount">Discount</label>
+                            <input type="number" class="form-control" id="Discount" aria-describedby="DiscountHelp" placeholder="Discount">
+                        </div>
 
                         <div class="form-group" id="result">
 
 
                         </div>
-                        <button type="button" class="btn btn-primary" onclick="addBooks()">Add Books</button>
+                        <button type="button" class="btn btn-primary" onclick="addProduct()">Add Product</button>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -88,117 +92,71 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
     <script>
-        var uri = 'api/Books';
+        var uri = 'api/Products';
         //Java script main function so JS start from here
         $(document).ready(function () {
             $.getJSON(uri)
                 .done(function (data) {
-                    $("#BooksTemplate").tmpl(data).appendTo("#allBooks");
+                    $("#ProductsTemplate").tmpl(data).appendTo("#allProducts");
                 });
         });
-        // function to get all books data and show on web page
-        function getAllBooks() {
+        // function to get all product data and show on web page
+        function getAllProducts() {
             $.getJSON(uri)
                 .done(function (data) {
-                    $("#allBooks").text("");
-                    $("#BooksTemplate").tmpl(data).appendTo("#allBooks");
+                    $("#allProducts").text("");
+                    $("#ProductsTemplate").tmpl(data).appendTo("#allProducts");
                 });
         }
-        // function to add data for new book
-        function addBooks() {
-            var _book_Title = $('#book_Title').val();
-            var _author = $('#author').val();
-            var _publisher = $('#publisher').val();
-            var _year_of_publish = parseInt($('#year_of_publish').val());
-            var Book = {
-                book_Title: _book_Title,
-                author: _author,
-                publisher: _publisher,
-                year_of_publish: _year_of_publish
+
+        // function to add data for new Product
+        function addProduct() {
+            var _Product_Name = $('#Product_Name').val();
+            var _Brand_Name = $('#Brand_Name').val();
+            var _Product_Category = $('#Product_Category').val();
+            var _Price = parseFloat($('#Price').val());
+            var _Discount = parseFloat($('#Discount').val());
+            var Product = {
+                Product_Name: _Product_Name,
+                Brand_Name: _Brand_Name,
+                Product_Category: _Product_Category,
+                Price: _Price,
+                Discount: _Discount
             };
             $.ajax({
                 type: "POST",
                 url: uri,
-                data: JSON.stringify(Book),
+                data: JSON.stringify(Product),
                 contentType: "application/json; charset=utf-8"
             }).done(function (response) {
                 $("#result").html("Success");
-                getAllBooks();
+                getAllProducts();
             }).fail(function (jqXHR, textStatus) {
                 $("#result").html("An error occured when Adding the bike record.");
             });
         }
-        // funtion to fill the data into update template
-        function getbookForUpdate(id) {
-            $.ajax({
-                type: "GET",
-                url: uri + "/" + id,
-                contentType: "application/json"
-            }).done(function (response) {
-                $('#_id').val(response.book_ID);
-                $('#update_book_Title').val(response.book_Title);
-                $('#update_author').val(response.author);
-                $('#update_publisher').val(response.publisher);
-                $('#update_year_of_publish').val(response.year_of_publish);
-            });
-        }
-        // function to update data of the book
-        function UpdateBooks() {
-            var _book_Title = $('#update_book_Title').val();
-            var _author = $('#update_author').val();
-            var _publisher = $('#update_publisher').val();
-            var _year_of_publish = parseInt($('#update_year_of_publish').val());
-            var BookUpdate = {
-                book_ID: parseInt($('#_id').val()),
-                book_Title: _book_Title,
-                author: _author,
-                publisher: _publisher,
-                year_of_publish: _year_of_publish
-            };
-            $.ajax({
-                type: "PUT",
-                url: uri + "/" + $('#_id').val(),
-                data: JSON.stringify(BookUpdate),
-                contentType: "application/json; charset=utf-8"
-            }).done(function (response) {
-                $("#update_result").html("Success");
-                getAllBooks();
-            }).fail(function (jqXHR, textStatus) {
-                $("#update_result").html("An error occured when Adding the bike record.");
-            });
-        }
-        //funtion to delete a particular book based on id
-        function remove(id) {
-            var yes = confirm("Are you sure you want to delete this Bike?");
-            if (yes) {
-                $.ajax({
-                    type: "DELETE",
-                    url: uri + "/" + id,
-                }).done(function (response) {
-                    getAllBooks();
-                });
-            }
-        }
+
+
     </script>
 
-    <!-- below mentioned code will create the template on the web page to display all books -->
-    <script id="BooksTemplate" type="text/x-jquery-tmpl">
+    <!-- below mentioned code will create the template on the web page to display all products -->
+    <script id="ProductsTemplate" type="text/x-jquery-tmpl">
         <div class="col-lg-3" style="margin:10px;">
             <div class="card card text-white bg-dark border-warning mb-3" style="width: 18rem; padding:20px">
                 <div class="card-body">
-                    <h5 class="card-title">Book Title: ${book_Title}</h5>
-                    <p class="card-text">Author :  ${author}</p>
-                    <p class="card-text">Publisher : ${publisher}</p>
-                    <p class="card-text">Year of Publish : ${year_of_publish}</p>
+                    <h5 class="card-title">Product Name: ${product_Name}</h5>
+                    <p class="card-text">Brand Name :  ${brand_Name}</p>
+                    <p class="card-text">Product_Category : ${product_Category}</p>
+                    <p class="card-text">Price  : ${price}</p>
+                    <p class="card-text">Discount  : ${discount}</p>
                 </div>
                 <span>
-                    <button class="btn btn-primary" onclick="getbookForUpdate('${book_ID}')" data-toggle="modal" data-target="#UpdateBooks">Update</button>
-                    <a href="#" class="btn btn-danger" onclick="remove('${book_ID}')">Delete</a>
+                    <button class="btn btn-primary" onclick="getbookForUpdate('${Id}')" data-toggle="modal" data-target="#UpdateBooks">Update</button>
+                    <a href="#" class="btn btn-danger" onclick="remove('${Id}')">Delete</a>
                 </span>
             </div>
         </div>
     </script>
-
 
 </body>
 </html>
