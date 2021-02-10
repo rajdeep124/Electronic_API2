@@ -132,8 +132,21 @@
                 $("#result").html("Success");
                 getAllProducts();
             }).fail(function (jqXHR, textStatus) {
-                $("#result").html("An error occured when Adding the bike record.");
+                $("#result").html("An error occured when Adding the data.");
             });
+        }
+
+        //funtion to delete a particular data based on id
+        function remove(id) {
+            var yes = confirm("Are you sure you want to delete this Data?");
+            if (yes) {
+                $.ajax({
+                    type: "DELETE",
+                    url: uri + "/" + id,
+                }).done(function (response) {
+                    getAllProducts();
+                });
+            }
         }
 
 
@@ -151,8 +164,8 @@
                     <p class="card-text">Discount  : ${discount}</p>
                 </div>
                 <span>
-                    <button class="btn btn-primary" onclick="getbookForUpdate('${Id}')" data-toggle="modal" data-target="#UpdateBooks">Update</button>
-                    <a href="#" class="btn btn-danger" onclick="remove('${Id}')">Delete</a>
+                    <button class="btn btn-primary" onclick="getProductsForUpdate('${id}')" data-toggle="modal" data-target="#UpdateProducts">Update</button>
+                    <a href="#" class="btn btn-danger" onclick="remove('${id}')">Delete</a>
                 </span>
             </div>
         </div>
