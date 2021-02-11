@@ -49,25 +49,25 @@
                     <form>
                         <div class="form-group">
                             <label for="Product_Name">Product Name</label>
-                            <input type="text" class="form-control" id="Product_Name" aria-describedby="Product_NameHelp" placeholder="Product Name">
+                            <input type="text" class="form-control" id="product_Name" aria-describedby="product_NameHelp" placeholder="Product Name">
 
                         </div>
                         <div class="form-group">
                             <label for="Brand_Name">Brand Name</label>
-                            <input type="text" class="form-control" id="Brand_Name" aria-describedby="Brand_NameHelp" placeholder="Brand Name">
+                            <input type="text" class="form-control" id="brand_Name" aria-describedby="brand_NameHelp" placeholder="Brand Name">
 
                         </div>
                         <div class="form-group">
                             <label for="Product_Category">Product Category</label>
-                            <input type="text" class="form-control" id="Product_Category" aria-describedby="Product_CategoryHelp" placeholder="Product Category">
+                            <input type="text" class="form-control" id="product_Category" aria-describedby="product_CategoryHelp" placeholder="Product Category">
                         </div>
                         <div class="form-group">
                             <label for="Price">Price</label>
-                            <input type="number" class="form-control" id="Price" aria-describedby="PriceHelp" placeholder="Price">
+                            <input type="number" class="form-control" id="price" aria-describedby="priceHelp" placeholder="Price">
                         </div>
                         <div class="form-group">
                             <label for="Discount">Discount</label>
-                            <input type="number" class="form-control" id="Discount" aria-describedby="DiscountHelp" placeholder="Discount">
+                            <input type="number" class="form-control" id="discount" aria-describedby="discountHelp" placeholder="Discount">
                         </div>
 
                         <div class="form-group" id="result">
@@ -85,7 +85,60 @@
         </div>
     </div>
 
-    <! -- java script files that will help to link the front end and back end -->
+    <!-- below mentioned code will create the template to Update a new products -->
+    <div class="modal" tabindex="-1" role="dialog" id="UpdateProducts">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Update Products</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <input type="hidden" class="form-control" id="update_id" aria-describedby="IdHelp">
+                        </div>
+                        <div class="form-group">
+                            <label for="Product_Name">Product Name</label>
+                            <input type="text" class="form-control" id="update_product_Name" aria-describedby="product_NameHelp">
+
+                        </div>
+                        <div class="form-group">
+                            <label for="Brand_Name">Brand Name</label>
+                            <input type="text" class="form-control" id="update_brand_Name" aria-describedby="brand_NameHelp">
+
+                        </div>
+                        <div class="form-group">
+                            <label for="Product_Category">Product Category</label>
+                            <input type="text" class="form-control" id="update_product_Category" aria-describedby="product_CategoryHelp">
+                        </div>
+                        <div class="form-group">
+                            <label for="Price">Price</label>
+                            <input type="number" class="form-control" id="update_price" aria-describedby="priceHelp">
+                        </div>
+                        <div class="form-group">
+                            <label for="Discount">Discount</label>
+                            <input type="number" class="form-control" id="update_discount" aria-describedby="discountHelp">
+                        </div>
+
+                        <div class="form-group" id="update_result">
+
+
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="UpdateProducts()">Update Product</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- java script files that will help to link the front end and back end -->
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
     <script src="https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
@@ -93,6 +146,7 @@
 
     <script>
         var uri = 'api/Products';
+
         //Java script main function so JS start from here
         $(document).ready(function () {
             $.getJSON(uri)
@@ -100,6 +154,8 @@
                     $("#ProductsTemplate").tmpl(data).appendTo("#allProducts");
                 });
         });
+
+
         // function to get all product data and show on web page
         function getAllProducts() {
             $.getJSON(uri)
@@ -111,17 +167,17 @@
 
         // function to add data for new Product
         function addProduct() {
-            var _Product_Name = $('#Product_Name').val();
-            var _Brand_Name = $('#Brand_Name').val();
-            var _Product_Category = $('#Product_Category').val();
-            var _Price = parseFloat($('#Price').val());
-            var _Discount = parseFloat($('#Discount').val());
+            var _product_Name = $('#product_Name').val();
+            var _brand_Name = $('#brand_Name').val();
+            var _product_Category = $('#product_Category').val();
+            var _price = parseFloat($('#price').val());
+            var _discount = parseFloat($('#discount').val());
             var Product = {
-                Product_Name: _Product_Name,
-                Brand_Name: _Brand_Name,
-                Product_Category: _Product_Category,
-                Price: _Price,
-                Discount: _Discount
+                product_Name: _product_Name,
+                brand_Name: _brand_Name,
+                product_Category: _product_Category,
+                price: _price,
+                discount: _discount
             };
             $.ajax({
                 type: "POST",
@@ -136,6 +192,7 @@
             });
         }
 
+
         //funtion to delete a particular data based on id
         function remove(id) {
             var yes = confirm("Are you sure you want to delete this Data?");
@@ -147,6 +204,49 @@
                     getAllProducts();
                 });
             }
+        }
+
+        // funtion to fill the data into update template
+        function getProductsForUpdate(id) {
+            $.ajax({
+                type: "GET",
+                url: uri + "/" + id,
+                contentType: "application/json"
+            }).done(function (response) {
+                $('#update_id').val(response.id);
+                $('#update_product_Name').val(response.product_Name);
+                $('#update_brand_Name').val(response.brand_Name);
+                $('#update_product_Category').val(response.product_Category);
+                $('#update_price').val(response.price);
+                $('#update_discount').val(response.discount);
+            });
+        }
+        // function to update data of the product
+        function UpdateProducts() {
+            var _product_Name = $('#update_product_Name').val();
+            var _brand_Name = $('#update_brand_Name').val();
+            var _product_Category = $('#update_product_Category').val();
+            var _price = parseFloat($('#update_price').val());
+            var _discount = parseFloat($('#update_discount').val());
+            var ProductUpdate = {
+                id: parseInt($('#update_id').val()),
+                product_Name: _product_Name,
+                brand_Name: _brand_Name,
+                product_Category: _product_Category,
+                price: _price,
+                discount: _discount
+            };
+            $.ajax({
+                type: "PUT",
+                url: uri + "/" + $('#update_id').val(),
+                data: JSON.stringify(ProductUpdate),
+                contentType: "application/json; charset=utf-8"
+            }).done(function (response) {
+                $("#update_result").html("Success");
+                getAllProducts();
+            }).fail(function (jqXHR, textStatus) {
+                $("#update_result").html("An error occured when Update the record.");
+            });
         }
 
 
